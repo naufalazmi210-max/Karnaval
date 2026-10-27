@@ -4,259 +4,238 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101b16">
-  <meta name="description" content="Temukan karnaval, festival, konser, dan kegiatan menarik di Malang Raya.">
-  <title>Event Ngalam — Peta Event Malang Raya</title>
+  <meta name="theme-color" content="#f7f7f2">
+  <title>AmanDolan — Cari Keseruanmu</title>
 
-  <!-- CSS utama -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
   <link rel="stylesheet" href="style.css">
-
-  <!-- Library peta Leaflet -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  >
 </head>
 <body>
   <header class="navbar">
-    <a class="brand" href="#">
+    <a href="#" class="brand">
       <span class="brand-icon">✳</span>
-      <span>event<span class="brand-accent">ngalam</span></span>
+      <span>Aman<span class="brand-green">Dolan.</span></span>
     </a>
-    <a class="nav-link" href="#peta">Jelajahi peta ↗</a>
+
+    <nav>
+      <a href="#explore">Explore</a>
+      <a href="#peta">Peta Dolan</a>
+      <a href="#roulette">Dolan Roulette</a>
+    </nav>
+
+    <button class="nav-cta" onclick="openAddModal()">
+      + Tambah Spot
+    </button>
   </header>
 
   <main>
     <section class="hero">
-      <div class="hero-badge">
-        <span class="live-dot"></span>
-        EVENT LOKAL, SATU PETA
-      </div>
-
-      <h1>Malang lagi<br><span>ada acara apa?</span></h1>
-      <p class="hero-desc">
-        Cari karnaval, festival, sound horeg, konser, dan
-        kegiatan seru di sekitar Malang Raya.
-      </p>
-
-      <form id="searchForm" class="search-box">
-        <span>⌕</span>
-        <input
-          id="searchInput"
-          type="search"
-          placeholder="Cari acara atau kecamatan..."
-          aria-label="Cari acara"
-        >
-        <button type="submit">Cari</button>
-      </form>
-
-      <div class="quick-tags">
-        <button class="tag" data-category="Karnaval">🎭 Karnaval</button>
-        <button class="tag" data-category="Musik">🔊 Musik</button>
-        <button class="tag" data-category="Bazar">🍜 Bazar</button>
-        <button class="tag" data-category="Olahraga">⚽ Olahraga</button>
-      </div>
-    </section>
-
-    <section class="content-section" id="peta">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">EXPLORE YOUR AREA</p>
-          <h2>Jelajahi sekitar kamu</h2>
-          <p class="muted">
-            Pilih titik pada peta untuk melihat detail acara.
-          </p>
-        </div>
-        <button id="locateBtn" class="location-btn">
-          ⌖ Lokasi saya
-        </button>
-      </div>
-
-      <div id="locationStatus" class="status-message" role="status">
-        Aktifkan lokasi jika ingin mengetahui posisi kamu di peta.
-      </div>
-
-      <div class="map-wrap">
-        <div id="map" aria-label="Peta lokasi acara Malang Raya"></div>
-        <div class="map-legend">
-          <span><i class="legend-dot green"></i> Karnaval</span>
-          <span><i class="legend-dot orange"></i> Musik</span>
-          <span><i class="legend-dot blue"></i> Bazar</span>
-        </div>
-      </div>
-
-      <div class="section-heading list-heading">
-        <div>
-          <p class="eyebrow">LOCAL DISCOVERY</p>
-          <h2>Temukan event</h2>
-        </div>
-        <span id="eventCount" class="count-badge">0 acara</span>
-      </div>
-
-      <div class="filter-row">
-        <select id="areaFilter" aria-label="Filter wilayah">
-          <option value="">Semua wilayah</option>
-          <option value="Kota Malang">Kota Malang</option>
-          <option value="Kabupaten Malang">Kabupaten Malang</option>
-          <option value="Kota Batu">Kota Batu</option>
-        </select>
-
-        <select id="categoryFilter" aria-label="Filter kategori">
-          <option value="">Semua kategori</option>
-          <option value="Karnaval">Karnaval</option>
-          <option value="Musik">Musik / Sound</option>
-          <option value="Bazar">Bazar</option>
-          <option value="Olahraga">Olahraga</option>
-        </select>
-
-        <select id="dateFilter" aria-label="Filter tanggal">
-          <option value="">Semua tanggal</option>
-          <option value="upcoming">Acara mendatang</option>
-        </select>
-      </div>
-
-      <div id="eventList" class="event-grid"></div>
-
-      <div class="notice">
-        <span>ⓘ</span>
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="live-dot"></span> YOUR NEXT ADVENTURE STARTS HERE</span>
+        <h1>Gabut? Yuk,<br>cari tempat <span class="highlight">dolan!</span></h1>
         <p>
-          Data awal merupakan <strong>contoh simulasi</strong>,
-          bukan jadwal acara yang telah dikonfirmasi. Selalu
-          cek sumber penyelenggara sebelum berangkat.
+          Temukan hidden gem, tempat nongkrong, kuliner murah,
+          dan spot seru di Malang Raya. Waktunya keluar dari kamar!
         </p>
-      </div>
-    </section>
 
-    <section class="submit-section">
-      <div>
-        <p class="eyebrow">BE PART OF THE COMMUNITY</p>
-        <h2>Tahu ada event baru?</h2>
-        <p class="muted">
-          Bantu teman-teman menemukan acara di sekitar mereka.
-        </p>
-      </div>
-      <button id="openFormBtn" class="primary-btn">
-        + Tambah informasi event
-      </button>
-    </section>
-
-    <section id="formSection" class="form-section hidden">
-      <div class="form-card">
-        <div class="form-title">
-          <h2>Bagikan informasi event</h2>
-          <button id="closeFormBtn" class="close-btn" aria-label="Tutup">✕</button>
+        <div class="hero-actions">
+          <a class="btn btn-dark" href="#explore">Jelajahi tempat <span>↗</span></a>
+          <button class="btn btn-light" onclick="spinRoulette()">🎲 Aku lagi gabut</button>
         </div>
-        <p class="muted small">
-          Data tersimpan di browser ini saja. Belum dikirim ke server
-          atau ditampilkan ke pengguna lain.
-        </p>
 
-        <form id="eventForm">
-          <label>Nama acara
-            <input name="name" required maxlength="100"
-              placeholder="Contoh: Karnaval Desa ..." >
-          </label>
+        <div class="hero-note">
+          <span class="avatar-stack">✦ ☻ ✿</span>
+          <span>Ide dolan buat kamu dan teman-temanmu.</span>
+        </div>
+      </div>
 
-          <div class="form-row">
-            <label>Kategori
-              <select name="category" required>
-                <option value="Karnaval">Karnaval</option>
-                <option value="Musik">Musik / Sound</option>
-                <option value="Bazar">Bazar</option>
-                <option value="Olahraga">Olahraga</option>
-              </select>
-            </label>
-            <label>Wilayah
-              <select name="area" required>
-                <option value="Kabupaten Malang">Kabupaten Malang</option>
-                <option value="Kota Malang">Kota Malang</option>
-                <option value="Kota Batu">Kota Batu</option>
-              </select>
-            </label>
+      <div class="hero-art">
+        <div class="art-blob"></div>
+        <div class="art-sticker sticker-top">NO MORE<br>WEEKEND DIAM! ✌</div>
+        <div class="art-card">
+          <div class="art-sun">☀</div>
+          <div class="art-mountain mountain-back"></div>
+          <div class="art-mountain mountain-front"></div>
+          <div class="art-ground"></div>
+          <div class="art-caption">
+            <span>YOUR NEXT STOP</span>
+            <strong>Malang Raya 🌿</strong>
           </div>
-
-          <label>Nama desa / kecamatan / lokasi
-            <input name="location" required maxlength="150"
-              placeholder="Contoh: Dampit, Kabupaten Malang">
-          </label>
-
-          <div class="form-row">
-            <label>Tanggal acara
-              <input name="date" type="date" required>
-            </label>
-            <label>Jam mulai
-              <input name="time" type="time" required>
-            </label>
-          </div>
-
-          <label>Latitude (opsional)
-            <input name="lat" type="number" step="any"
-              min="-90" max="90" placeholder="-8.123456">
-          </label>
-          <label>Longitude (opsional)
-            <input name="lng" type="number" step="any"
-              min="-180" max="180" placeholder="112.123456">
-          </label>
-
-          <label>Sumber informasi
-            <input name="source" type="url" maxlength="300"
-              placeholder="https://... (link pengumuman panitia)">
-          </label>
-
-          <label>Catatan tambahan
-            <textarea name="description" maxlength="500" rows="3"
-              placeholder="Rute, penyelenggara, atau informasi lainnya"></textarea>
-          </label>
-
-          <button type="submit" class="primary-btn full-width">
-            Simpan informasi
-          </button>
-          <p id="formStatus" class="status-message" role="status"></p>
-        </form>
+        </div>
+        <div class="art-sticker sticker-bottom">DOLAN MODE: ON ⚡</div>
+        <span class="floating-star star-one">✳</span>
+        <span class="floating-star star-two">✦</span>
       </div>
     </section>
 
-    <section class="how-section">
-      <p class="eyebrow">CARA PAKAI</p>
-      <h2>Cara mengetahui lokasi karnaval</h2>
-      <div class="steps-grid">
-        <article class="step-card">
-          <span>01</span>
-          <h3>Buka peta</h3>
-          <p>Lihat titik acara yang tersedia di wilayah Malang Raya.</p>
-        </article>
-        <article class="step-card">
-          <span>02</span>
-          <h3>Aktifkan lokasi</h3>
-          <p>Tekan tombol Lokasi Saya dan izinkan akses lokasi di browser.</p>
-        </article>
-        <article class="step-card">
-          <span>03</span>
-          <h3>Pilih titik acara</h3>
-          <p>Tekan penanda di peta atau kartu acara untuk membaca detailnya.</p>
-        </article>
-        <article class="step-card">
-          <span>04</span>
-          <h3>Cek rute</h3>
-          <p>Gunakan tombol petunjuk arah untuk membuka Google Maps.</p>
-        </article>
+    <section class="search-section" id="explore">
+      <div class="search-heading">
+        <div>
+          <span class="eyebrow">TEMUKAN TEMPATMU</span>
+          <h2>Mau dolan ke mana?</h2>
+        </div>
+        <span class="result-total" id="resultCount">0 tempat</span>
       </div>
+
+      <div class="search-bar">
+        <span class="search-icon">⌕</span>
+        <input id="searchInput" type="search"
+          placeholder="Cari tempat, kuliner, atau suasana..."
+          aria-label="Cari tempat">
+        <button onclick="renderPlaces()">Cari ↗</button>
+      </div>
+
+      <div class="filter-row" id="categoryFilters">
+        <button class="filter-chip active" data-category="Semua">✳ Semua</button>
+        <button class="filter-chip" data-category="Kuliner">🍜 Kuliner</button>
+        <button class="filter-chip" data-category="Nongkrong">☕ Nongkrong</button>
+        <button class="filter-chip" data-category="Alam">🌿 Alam</button>
+        <button class="filter-chip" data-category="Wisata">🏞 Wisata</button>
+        <button class="filter-chip" data-category="Gratis">🪙 Gratis</button>
+        <button class="filter-chip" data-category="Favorit">♥ Favorit</button>
+      </div>
+
+      <div class="explore-layout">
+        <div class="place-column">
+          <div class="section-mini-heading">
+            <h3>Spot pilihan <span class="tiny-spark">✳</span></h3>
+            <span>Temukan keseruanmu</span>
+          </div>
+          <div class="place-grid" id="placeGrid"></div>
+          <div class="empty-state" id="emptyState" hidden>
+            <span>🧭</span>
+            <h3>Belum ketemu tempatnya!</h3>
+            <p>Coba kata kunci atau kategori lainnya.</p>
+          </div>
+        </div>
+
+        <aside class="map-panel" id="peta">
+          <div class="map-heading">
+            <div>
+              <span class="eyebrow">EXPLORE THE AREA</span>
+              <h3>Peta Dolan 🗺️</h3>
+            </div>
+            <span class="map-live">● MAP</span>
+          </div>
+          <div id="map"></div>
+          <div class="map-foot">
+            <span>📍 Malang Raya</span>
+            <span>Klik pin untuk detail</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="roulette-section" id="roulette">
+      <div class="roulette-decoration">✳</div>
+      <div class="roulette-copy">
+        <span class="eyebrow">THE GABUT SOLVER</span>
+        <h2>Gak tahu mau ke mana?<br><span>Serahin aja ke roda!</span></h2>
+        <p>Pilih budget dan suasana hati. Biar AmanDolan yang kasih ide.</p>
+      </div>
+
+      <div class="roulette-box">
+        <label for="budgetSelect">💸 Budget kamu</label>
+        <select id="budgetSelect">
+          <option value="0">Gratis aja!</option>
+          <option value="15000">Maksimal Rp15.000</option>
+          <option value="30000" selected>Maksimal Rp30.000</option>
+          <option value="50000">Maksimal Rp50.000</option>
+          <option value="100000">Bebas, asal seru!</option>
+        </select>
+
+        <label for="moodSelect">🌈 Lagi pengin apa?</label>
+        <select id="moodSelect">
+          <option value="Semua">Apa aja, yang penting seru</option>
+          <option value="Santai">Santai dan healing</option>
+          <option value="Makan">Berburu makanan</option>
+          <option value="Petualangan">Jalan-jalan dan petualangan</option>
+          <option value="Nongkrong">Nongkrong bareng teman</option>
+        </select>
+
+        <button class="btn btn-green roulette-button" onclick="spinRoulette()">
+          🎲 PUTAR IDE DOLAN!
+        </button>
+        <div id="rouletteResult" class="roulette-result" aria-live="polite">
+          <span class="result-emoji">✨</span>
+          <p>Siap-siap menemukan keseruan baru.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="community-section">
+      <div>
+        <span class="eyebrow">SPOT LOKAL, CERITA LOKAL</span>
+        <h2>Punya tempat rahasia?<br><span>Share ke teman dolan!</span></h2>
+        <p>Bantu orang lain menemukan tempat seru di sekitar mereka.</p>
+      </div>
+      <button class="btn btn-dark" onclick="openAddModal()">+ Tambahkan spot</button>
     </section>
   </main>
 
   <footer>
-    <a class="brand" href="#">
+    <a href="#" class="brand">
       <span class="brand-icon">✳</span>
-      <span>event<span class="brand-accent">ngalam</span></span>
+      <span>Aman<span class="brand-green">Dolan.</span></span>
     </a>
-    <p>Eksplorasi lokal, lebih mudah.</p>
-    <small>
-      Peta © OpenStreetMap contributors · Prototipe informasi komunitas
-    </small>
+    <p>Dirancang buat kamu yang gak mau weekend berlalu begitu aja.</p>
+    <span>© 2026 AmanDolan · Made for local explorers</span>
   </footer>
 
-  <!-- Leaflet harus dimuat sebelum script.js -->
+  <!-- Modal tambah tempat -->
+  <div class="modal-overlay" id="addModal" hidden>
+    <div class="modal">
+      <div class="modal-heading">
+        <div>
+          <span class="eyebrow">SHARE YOUR SPOT</span>
+          <h2>Tambah tempat baru ✨</h2>
+        </div>
+        <button class="close-modal" onclick="closeAddModal()" aria-label="Tutup">✕</button>
+      </div>
+
+      <form id="addPlaceForm">
+        <label for="placeName">Nama tempat</label>
+        <input id="placeName" required maxlength="80" placeholder="Contoh: Kedai Kopi Favorit">
+
+        <label for="placeCategory">Kategori</label>
+        <select id="placeCategory" required>
+          <option value="Nongkrong">Nongkrong</option>
+          <option value="Kuliner">Kuliner</option>
+          <option value="Alam">Alam</option>
+          <option value="Wisata">Wisata</option>
+        </select>
+
+        <label for="placeArea">Alamat / area</label>
+        <input id="placeArea" required maxlength="120" placeholder="Contoh: Kecamatan Lowokwaru">
+
+        <label for="placePrice">Estimasi budget (Rp)</label>
+        <input id="placePrice" type="number" min="0" max="10000000" required placeholder="15000">
+
+        <label for="placeDesc">Kenapa tempat ini seru?</label>
+        <textarea id="placeDesc" maxlength="240" required placeholder="Ceritakan sedikit tentang tempat ini..."></textarea>
+
+        <label for="placeLat">Latitude (opsional)</label>
+        <input id="placeLat" type="number" step="any" min="-90" max="90" placeholder="-7.9666">
+
+        <label for="placeLng">Longitude (opsional)</label>
+        <input id="placeLng" type="number" step="any" min="-180" max="180" placeholder="112.6326">
+
+        <p class="form-note">Data tempat baru tersimpan di browser ini saja, belum dibagikan ke pengguna lain.</p>
+        <button class="btn btn-green form-submit" type="submit">Simpan spot ↗</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
+
+
