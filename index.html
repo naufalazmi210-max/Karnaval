@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101b16">
+  <meta name="description" content="Temukan karnaval, festival, konser, dan kegiatan menarik di Malang Raya.">
+  <title>Event Ngalam — Peta Event Malang Raya</title>
+
+  <!-- CSS utama -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Library peta Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  >
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="#">
+      <span class="brand-icon">✳</span>
+      <span>event<span class="brand-accent">ngalam</span></span>
+    </a>
+    <a class="nav-link" href="#peta">Jelajahi peta ↗</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-badge">
+        <span class="live-dot"></span>
+        EVENT LOKAL, SATU PETA
+      </div>
+
+      <h1>Malang lagi<br><span>ada acara apa?</span></h1>
+      <p class="hero-desc">
+        Cari karnaval, festival, sound horeg, konser, dan
+        kegiatan seru di sekitar Malang Raya.
+      </p>
+
+      <form id="searchForm" class="search-box">
+        <span>⌕</span>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Cari acara atau kecamatan..."
+          aria-label="Cari acara"
+        >
+        <button type="submit">Cari</button>
+      </form>
+
+      <div class="quick-tags">
+        <button class="tag" data-category="Karnaval">🎭 Karnaval</button>
+        <button class="tag" data-category="Musik">🔊 Musik</button>
+        <button class="tag" data-category="Bazar">🍜 Bazar</button>
+        <button class="tag" data-category="Olahraga">⚽ Olahraga</button>
+      </div>
+    </section>
+
+    <section class="content-section" id="peta">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">EXPLORE YOUR AREA</p>
+          <h2>Jelajahi sekitar kamu</h2>
+          <p class="muted">
+            Pilih titik pada peta untuk melihat detail acara.
+          </p>
+        </div>
+        <button id="locateBtn" class="location-btn">
+          ⌖ Lokasi saya
+        </button>
+      </div>
+
+      <div id="locationStatus" class="status-message" role="status">
+        Aktifkan lokasi jika ingin mengetahui posisi kamu di peta.
+      </div>
+
+      <div class="map-wrap">
+        <div id="map" aria-label="Peta lokasi acara Malang Raya"></div>
+        <div class="map-legend">
+          <span><i class="legend-dot green"></i> Karnaval</span>
+          <span><i class="legend-dot orange"></i> Musik</span>
+          <span><i class="legend-dot blue"></i> Bazar</span>
+        </div>
+      </div>
+
+      <div class="section-heading list-heading">
+        <div>
+          <p class="eyebrow">LOCAL DISCOVERY</p>
+          <h2>Temukan event</h2>
+        </div>
+        <span id="eventCount" class="count-badge">0 acara</span>
+      </div>
+
+      <div class="filter-row">
+        <select id="areaFilter" aria-label="Filter wilayah">
+          <option value="">Semua wilayah</option>
+          <option value="Kota Malang">Kota Malang</option>
+          <option value="Kabupaten Malang">Kabupaten Malang</option>
+          <option value="Kota Batu">Kota Batu</option>
+        </select>
+
+        <select id="categoryFilter" aria-label="Filter kategori">
+          <option value="">Semua kategori</option>
+          <option value="Karnaval">Karnaval</option>
+          <option value="Musik">Musik / Sound</option>
+          <option value="Bazar">Bazar</option>
+          <option value="Olahraga">Olahraga</option>
+        </select>
+
+        <select id="dateFilter" aria-label="Filter tanggal">
+          <option value="">Semua tanggal</option>
+          <option value="upcoming">Acara mendatang</option>
+        </select>
+      </div>
+
+      <div id="eventList" class="event-grid"></div>
+
+      <div class="notice">
+        <span>ⓘ</span>
+        <p>
+          Data awal merupakan <strong>contoh simulasi</strong>,
+          bukan jadwal acara yang telah dikonfirmasi. Selalu
+          cek sumber penyelenggara sebelum berangkat.
+        </p>
+      </div>
+    </section>
+
+    <section class="submit-section">
+      <div>
+        <p class="eyebrow">BE PART OF THE COMMUNITY</p>
+        <h2>Tahu ada event baru?</h2>
+        <p class="muted">
+          Bantu teman-teman menemukan acara di sekitar mereka.
+        </p>
+      </div>
+      <button id="openFormBtn" class="primary-btn">
+        + Tambah informasi event
+      </button>
+    </section>
+
+    <section id="formSection" class="form-section hidden">
+      <div class="form-card">
+        <div class="form-title">
+          <h2>Bagikan informasi event</h2>
+          <button id="closeFormBtn" class="close-btn" aria-label="Tutup">✕</button>
+        </div>
+        <p class="muted small">
+          Data tersimpan di browser ini saja. Belum dikirim ke server
+          atau ditampilkan ke pengguna lain.
+        </p>
+
+        <form id="eventForm">
+          <label>Nama acara
+            <input name="name" required maxlength="100"
+              placeholder="Contoh: Karnaval Desa ..." >
+          </label>
+
+          <div class="form-row">
+            <label>Kategori
+              <select name="category" required>
+                <option value="Karnaval">Karnaval</option>
+                <option value="Musik">Musik / Sound</option>
+                <option value="Bazar">Bazar</option>
+                <option value="Olahraga">Olahraga</option>
+              </select>
+            </label>
+            <label>Wilayah
+              <select name="area" required>
+                <option value="Kabupaten Malang">Kabupaten Malang</option>
+                <option value="Kota Malang">Kota Malang</option>
+                <option value="Kota Batu">Kota Batu</option>
+              </select>
+            </label>
+          </div>
+
+          <label>Nama desa / kecamatan / lokasi
+            <input name="location" required maxlength="150"
+              placeholder="Contoh: Dampit, Kabupaten Malang">
+          </label>
+
+          <div class="form-row">
+            <label>Tanggal acara
+              <input name="date" type="date" required>
+            </label>
+            <label>Jam mulai
+              <input name="time" type="time" required>
+            </label>
+          </div>
+
+          <label>Latitude (opsional)
+            <input name="lat" type="number" step="any"
+              min="-90" max="90" placeholder="-8.123456">
+          </label>
+          <label>Longitude (opsional)
+            <input name="lng" type="number" step="any"
+              min="-180" max="180" placeholder="112.123456">
+          </label>
+
+          <label>Sumber informasi
+            <input name="source" type="url" maxlength="300"
+              placeholder="https://... (link pengumuman panitia)">
+          </label>
+
+          <label>Catatan tambahan
+            <textarea name="description" maxlength="500" rows="3"
+              placeholder="Rute, penyelenggara, atau informasi lainnya"></textarea>
+          </label>
+
+          <button type="submit" class="primary-btn full-width">
+            Simpan informasi
+          </button>
+          <p id="formStatus" class="status-message" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="how-section">
+      <p class="eyebrow">CARA PAKAI</p>
+      <h2>Cara mengetahui lokasi karnaval</h2>
+      <div class="steps-grid">
+        <article class="step-card">
+          <span>01</span>
+          <h3>Buka peta</h3>
+          <p>Lihat titik acara yang tersedia di wilayah Malang Raya.</p>
+        </article>
+        <article class="step-card">
+          <span>02</span>
+          <h3>Aktifkan lokasi</h3>
+          <p>Tekan tombol Lokasi Saya dan izinkan akses lokasi di browser.</p>
+        </article>
+        <article class="step-card">
+          <span>03</span>
+          <h3>Pilih titik acara</h3>
+          <p>Tekan penanda di peta atau kartu acara untuk membaca detailnya.</p>
+        </article>
+        <article class="step-card">
+          <span>04</span>
+          <h3>Cek rute</h3>
+          <p>Gunakan tombol petunjuk arah untuk membuka Google Maps.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand" href="#">
+      <span class="brand-icon">✳</span>
+      <span>event<span class="brand-accent">ngalam</span></span>
+    </a>
+    <p>Eksplorasi lokal, lebih mudah.</p>
+    <small>
+      Peta © OpenStreetMap contributors · Prototipe informasi komunitas
+    </small>
+  </footer>
+
+  <!-- Leaflet harus dimuat sebelum script.js -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
